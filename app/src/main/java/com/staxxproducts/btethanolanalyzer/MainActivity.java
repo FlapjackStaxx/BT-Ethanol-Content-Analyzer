@@ -58,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
     private Button mScanBtn;
     private Button mOffBtn;
     private Button mListPairedDevicesBtn;
-    private Button mDiscoverBtn;
+   // private Button mDiscoverBtn;
+    private Button mHidePairedBtn;
+
     private ListView mDevicesListView;
     private CheckBox mLED1;
 
@@ -79,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
         ethPct = (TextView) findViewById(R.id.ethNumTv);
         mScanBtn = (Button)findViewById(R.id.btOnBtn);
         mOffBtn = (Button)findViewById(R.id.btOffBtn);
-        mDiscoverBtn = (Button)findViewById(R.id.btDiscNewBtn);
+        //mDiscoverBtn = (Button)findViewById(R.id.btDiscNewBtn);
+        mHidePairedBtn = (Button)findViewById(R.id.hidePairedBtn);
         mListPairedDevicesBtn = (Button)findViewById(R.id.btShowPairedBtn);
         Button startButton = (Button) findViewById(R.id.startBtn);
         Button stopButton = (Button) findViewById(R.id.stopBtn);
@@ -87,9 +90,9 @@ public class MainActivity extends AppCompatActivity {
         mBTArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
 
-      //  mDevicesListView = (ListView)findViewById(R.id.devices_list_view);
-   //     mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
-    //       mDevicesListView.setOnItemClickListener(mDeviceClickListener);
+        mDevicesListView = (ListView)findViewById(R.id.devices_list_view);
+         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
+          mDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
         // Ask for location permission if not already allowed
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -130,6 +133,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v){
                     if(mConnectedThread != null) //First check to make sure thread created
                         mConnectedThread.write("test");
+                    else
+                        Toast.makeText(MainActivity.this,"Select Paired Device To Connect",Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -151,21 +156,45 @@ public class MainActivity extends AppCompatActivity {
             mListPairedDevicesBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v){
-                    showBTDialog();
+                //    showBTDialog();
 
-                    //listPairedDevices();
+                    listPairedDevices();
                 }
             });
 
-            mDiscoverBtn.setOnClickListener(new View.OnClickListener(){
+/*            mDiscoverBtn.setOnClickListener(new View.OnClickListener(){
 
                 @Override
                 public void onClick(View v){
                     discover();
 
                 }
+            });    */
+            mHidePairedBtn.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v){
+                    hideDiscover();
+
+                }
+            });
+            stopButton.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v){
+                    if(mConnectedThread != null) //First check to make sure thread created
+                    mConnectedThread.cancel();
+                    else
+                        Toast.makeText(MainActivity.this,"Can't Stop A Connection That Wasn't Connected!",Toast.LENGTH_SHORT).show();
+
+
+                }
             });
         }
+    }
+
+    private void hideDiscover() {
+        mDevicesListView.setVisibility(View.INVISIBLE);
     }
 
     private void bluetoothOn(){
@@ -203,8 +232,27 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),"Bluetooth turned Off", Toast.LENGTH_SHORT).show();
     }
 
-    private void discover(){
-        setContentView(R.layout.btpopup);
+/*    private void discover(){
+        mDevicesListView.setVisibility(View.VISIBLE);
+        // Check if the device is already discovering
+        if(mBTAdapter.isDiscovering()){
+            mBTAdapter.cancelDiscovery();
+            Toast.makeText(getApplicationContext(),"Discovery stopped",Toast.LENGTH_SHORT).show();
+        }
+        else{
+            if(mBTAdapter.isEnabled()) {
+                mBTArrayAdapter.clear(); // clear items
+                mBTAdapter.startDiscovery();
+                Toast.makeText(getApplicationContext(), "Discovery started", Toast.LENGTH_SHORT).show();
+                registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }*/
+
+/*        setContentView(R.layout.btpopup);
         mDevicesListView = (ListView)findViewById(R.id.devices_list_view);
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
         mDevicesListView.setOnItemClickListener(mDeviceClickListener);
@@ -254,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
         // Create popup and show
         popDialog.create();
         popDialog.show();
-    }
+    }*/
 
     final BroadcastReceiver blReceiver = new BroadcastReceiver() {
         @Override
@@ -271,8 +319,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void listPairedDevices(){
 
-        showBTDialog();
-       /* mBTArrayAdapter.clear();
+     //   showBTDialog();
+        mDevicesListView.setVisibility(View.VISIBLE);
+       mBTArrayAdapter.clear();
         mPairedDevices = mBTAdapter.getBondedDevices();
         if(mBTAdapter.isEnabled()) {
             // put it's one to the adapter
@@ -282,7 +331,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Show Paired Devices", Toast.LENGTH_SHORT).show();
         }
         else
-            Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();*/
+            Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
     }
 
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
@@ -339,6 +388,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }.start();
         }
+
     };
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
@@ -352,7 +402,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void showBTDialog() {
+   /* private void showBTDialog() {
         setContentView(R.layout.btpopup);
        mDevicesListView = (ListView)findViewById(R.id.devices_list_view);
         mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
@@ -399,7 +449,7 @@ public class MainActivity extends AppCompatActivity {
         popDialog.create();
         popDialog.show();
 
-    }
+    }*/
 
 
 }
