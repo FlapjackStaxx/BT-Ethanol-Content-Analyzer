@@ -28,19 +28,19 @@
         android:layout_marginBottom="8dp"
         android:text="BT On"
         app:layout_constraintBottom_toTopOf="@+id/btOffBtn"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineL"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btDiscNewBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
 
         android:text="Discover New Devices"
         app:layout_constraintBottom_toTopOf="@+id/btShowPairedBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btOnBtn" />
+        app:layout_constraintEnd_toStartOf="@+id/guidelineR"
+        app:layout_constraintStart_toStartOf="@+id/guidelineR" />
 
     <Button
         android:id="@+id/btOffBtn"
@@ -50,20 +50,20 @@
         android:layout_marginBottom="16dp"
         android:text="BT Off"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineL"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btShowPairedBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
 
         android:text="Show Paired Devices"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btOffBtn" />
+        app:layout_constraintEnd_toStartOf="@+id/guidelineR"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/guidelineR" />
 
     <TextView
         android:id="@+id/nameTv"
@@ -79,10 +79,43 @@
         android:id="@+id/ethTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:text="Ethanol Content"
         app:layout_constraintEnd_toStartOf="@+id/guidelineL"
         app:layout_constraintStart_toStartOf="@+id/guidelineL"
         app:layout_constraintTop_toBottomOf="@+id/nameTv" />
+
+    <TextView
+        android:id="@+id/ethTempTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Fuel Temperature"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineL"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="@+id/guidelineL"
+        app:layout_constraintTop_toBottomOf="@+id/ethTv" />
+
+    <TextView
+        android:id="@+id/ethNumTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Eth%"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineR"
+        app:layout_constraintStart_toStartOf="@+id/guidelineR"
+        app:layout_constraintTop_toBottomOf="@+id/nameTv" />
+
+    <TextView
+        android:id="@+id/ftempNumTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Temp"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineR"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="@+id/guidelineR"
+        app:layout_constraintTop_toBottomOf="@+id/ethNumTv" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
