@@ -18,4 +18,6 @@
     <string name="show_paired">Show Paired Devices</string>
     <string name="bt_off">BT Off</string>
     <string name="hide_paired">Hide Paired Devices</string>
+    <string name="connection_failed">Connection Failed</string>
+    <string name="connection_end">Connection Ended</string>
 </resources>

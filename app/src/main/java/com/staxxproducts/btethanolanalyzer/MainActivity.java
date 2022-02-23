@@ -52,6 +52,10 @@ public class MainActivity extends AppCompatActivity {
     // GUI Components
     private TextView mBluetoothStatus;
     private TextView ethPct;
+    private TextView fuelTemp;
+    String ethPctNum = "";
+    String tempInNum = "";
+    String restartName = "";
 
     private ListView mDevicesListView;
 
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBluetoothStatus = (TextView)findViewById(R.id.bluetooth_status);
         ethPct = (TextView) findViewById(R.id.ethNumTv);
+        fuelTemp = (TextView) findViewById(R.id.ftempNumTv);
         Button mScanBtn = (Button) findViewById(R.id.btOnBtn);
         Button mOffBtn = (Button) findViewById(R.id.btOffBtn);
         Button mHidePairedBtn = (Button) findViewById(R.id.hidePairedBtn);
@@ -95,17 +100,21 @@ public class MainActivity extends AppCompatActivity {
                     String readMessage = null;
                     try {
                         readMessage = new String((byte[]) msg.obj, "UTF-8");
+                        ethPctNum = readMessage.substring(0,2);
+                        tempInNum = readMessage.substring(3,5);
+
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-                    ethPct.setText(readMessage);
+                    ethPct.setText(ethPctNum + " %");
+                    fuelTemp.setText(tempInNum + " C");
                 }
 
                 if(msg.what == CONNECTING_STATUS){
                     if(msg.arg1 == 1)
                         mBluetoothStatus.setText("Connected to Device: " + msg.obj);
                     else
-                        mBluetoothStatus.setText("Connection Failed");
+                        mBluetoothStatus.setText(R.string.connection_failed);
                 }
             }
         };
@@ -118,8 +127,9 @@ public class MainActivity extends AppCompatActivity {
         else {
 
             startButton.setOnClickListener(v -> {
-                if(mConnectedThread != null) //First check to make sure thread created
-                    mConnectedThread.write("test");
+                if(mConnectedThread != null) {//First check to make sure thread created
+                    mBluetoothStatus.setText("Sync Started");
+                }
                 else
                     Toast.makeText(MainActivity.this,"Select Paired Device To Connect",Toast.LENGTH_SHORT).show();
             });
@@ -134,8 +144,10 @@ public class MainActivity extends AppCompatActivity {
 
             mHidePairedBtn.setOnClickListener(v -> hideDiscover());
             stopButton.setOnClickListener(v -> {
-                if(mConnectedThread != null) //First check to make sure thread created
-                mConnectedThread.cancel();
+                if (mConnectedThread != null) {//First check to make sure thread created
+                    mConnectedThread.cancel();
+                mBluetoothStatus.setText(R.string.connection_end);
+            }
                 else
                     Toast.makeText(MainActivity.this,"Can't Stop A Connection That Wasn't Connected!",Toast.LENGTH_SHORT).show();
 
@@ -227,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
             String info = ((TextView) view).getText().toString();
             final String address = info.substring(info.length() - 17);
             final String name = info.substring(0,info.length() - 17);
+            restartName = name;
 
             // Spawn a new thread to avoid blocking the GUI one
             new Thread()
@@ -263,6 +276,7 @@ public class MainActivity extends AppCompatActivity {
 
                         mHandler.obtainMessage(CONNECTING_STATUS, 1, -1, name)
                                 .sendToTarget();
+                        hideDiscover();
                     }
                 }
             }.start();
