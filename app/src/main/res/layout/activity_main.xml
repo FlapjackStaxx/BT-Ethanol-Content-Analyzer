@@ -31,13 +31,13 @@
         app:layout_constraintEnd_toStartOf="@+id/guidelineL"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/btDiscNewBtn"
+
+        <Button
+        android:id="@+id/hidePairedBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-
-        android:text="Discover New Devices"
+        android:text="@string/hide_paired"
         app:layout_constraintBottom_toTopOf="@+id/btShowPairedBtn"
         app:layout_constraintEnd_toStartOf="@+id/guidelineR"
         app:layout_constraintStart_toStartOf="@+id/guidelineR" />
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="16dp"
-        android:text="BT Off"
+        android:text="@string/bt_off"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineL"
         app:layout_constraintStart_toStartOf="parent" />
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
 
-        android:text="Show Paired Devices"
+        android:text="@string/show_paired"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guidelineR"
         app:layout_constraintHorizontal_bias="1.0"
@@ -70,10 +70,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Tuner Things Ethanol Content Analyzer"
+        android:text="@string/app_main_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ListView
+        android:id="@+id/devices_list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        app:layout_constraintTop_toBottomOf="@id/ftempNumTv"
+        app:layout_constraintBottom_toTopOf="@id/startBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:choiceMode="singleChoice"
+        android:visibility="invisible"/>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -83,7 +93,7 @@
 
         android:layout_marginBottom="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btDiscNewBtn"
+        app:layout_constraintBottom_toTopOf="@+id/hidePairedBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -93,7 +103,7 @@
             android:layout_weight="0.1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="Status:"
+            android:text="@string/status"
             android:textStyle="bold" />
 
         <TextView
@@ -103,7 +113,7 @@
             android:layout_weight="0.9"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="&lt;Bluetooth Status>" />
+            android:text="@string/bluetooth_status" />
     </LinearLayout>
 
     <TextView
@@ -111,7 +121,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Ethanol Content"
+        android:text="@string/ethanol_content"
         app:layout_constraintEnd_toStartOf="@+id/guidelineL"
         app:layout_constraintStart_toStartOf="@+id/guidelineL"
         app:layout_constraintTop_toBottomOf="@+id/nameTv" />
@@ -121,7 +131,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Fuel Temperature"
+        android:text="@string/fuel_temperature"
         app:layout_constraintEnd_toStartOf="@+id/guidelineL"
         app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="@+id/guidelineL"
@@ -132,7 +142,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Eth%"
+        android:text="@string/eth"
         app:layout_constraintEnd_toStartOf="@+id/guidelineR"
         app:layout_constraintStart_toStartOf="@+id/guidelineR"
         app:layout_constraintTop_toBottomOf="@+id/nameTv" />
@@ -142,7 +152,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="Temp"
+        android:text="@string/temp"
         app:layout_constraintEnd_toStartOf="@+id/guidelineR"
         app:layout_constraintHorizontal_bias="0.533"
         app:layout_constraintStart_toStartOf="@+id/guidelineR"
@@ -152,7 +162,7 @@
         android:id="@+id/startBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start Sync"
+        android:text="@string/start_sync"
         app:layout_constraintBottom_toTopOf="@+id/stopBtn"
         app:layout_constraintEnd_toStartOf="@+id/guidelineR"
         app:layout_constraintStart_toStartOf="@+id/guidelineL" />
@@ -161,7 +171,7 @@
         android:id="@+id/stopBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stop Sync"
+        android:text="@string/stop_sync"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toStartOf="@+id/guidelineR"
         app:layout_constraintStart_toStartOf="@+id/guidelineL" />

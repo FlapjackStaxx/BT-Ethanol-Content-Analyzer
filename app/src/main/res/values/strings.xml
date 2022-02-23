@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">BT Ethanol Analyzer</string>
+    <string name="bt_status_not_found">Status: Bluetooth not found</string>
+    <string name="bt_enabled">Bluetooth enabled</string>
+    <string name="Enabled">Enabled</string>
+    <string name="Disabled">Disabled</string>
+    <string name="bt_disabled">Bluetooth disabled</string>
+    <string name="bt_connecting">Connecting...</string>
+    <string name="stop_sync">Stop Sync</string>
+    <string name="start_sync">Start Sync</string>
+    <string name="temp">Temp</string>
+    <string name="eth">Eth%</string>
+    <string name="fuel_temperature">Fuel Temperature</string>
+    <string name="ethanol_content">Ethanol Content</string>
+    <string name="bluetooth_status"><![CDATA[<Bluetooth Status>]]></string>
+    <string name="status">Status:</string>
+    <string name="app_main_title">Tuner Things Ethanol Content Analyzer</string>
+    <string name="show_paired">Show Paired Devices</string>
+    <string name="bt_off">BT Off</string>
+    <string name="hide_paired">Hide Paired Devices</string>
 </resources>

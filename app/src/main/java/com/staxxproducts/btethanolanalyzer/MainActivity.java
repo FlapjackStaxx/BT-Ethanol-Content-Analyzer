@@ -5,31 +5,28 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.Intent;
-import android.content.IntentFilter;
+
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-import android.view.LayoutInflater;
+
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Adapter;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
+
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,15 +52,10 @@ public class MainActivity extends AppCompatActivity {
     // GUI Components
     private TextView mBluetoothStatus;
     private TextView ethPct;
-    private Button mScanBtn;
-    private Button mOffBtn;
-    private Button mListPairedDevicesBtn;
-    private Button mDiscoverBtn;
+
     private ListView mDevicesListView;
-    private CheckBox mLED1;
 
     private BluetoothAdapter mBTAdapter;
-    private Set<BluetoothDevice> mPairedDevices;
     private ArrayAdapter<String> mBTArrayAdapter;
 
     private Handler mHandler; // Our main handler that will receive callback notifications
@@ -77,19 +69,19 @@ public class MainActivity extends AppCompatActivity {
 
         mBluetoothStatus = (TextView)findViewById(R.id.bluetooth_status);
         ethPct = (TextView) findViewById(R.id.ethNumTv);
-        mScanBtn = (Button)findViewById(R.id.btOnBtn);
-        mOffBtn = (Button)findViewById(R.id.btOffBtn);
-        mDiscoverBtn = (Button)findViewById(R.id.btDiscNewBtn);
-        mListPairedDevicesBtn = (Button)findViewById(R.id.btShowPairedBtn);
+        Button mScanBtn = (Button) findViewById(R.id.btOnBtn);
+        Button mOffBtn = (Button) findViewById(R.id.btOffBtn);
+        Button mHidePairedBtn = (Button) findViewById(R.id.hidePairedBtn);
+        Button mListPairedDevicesBtn = (Button) findViewById(R.id.btShowPairedBtn);
         Button startButton = (Button) findViewById(R.id.startBtn);
         Button stopButton = (Button) findViewById(R.id.stopBtn);
 
         mBTArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter(); // get a handle on the bluetooth radio
 
-      //  mDevicesListView = (ListView)findViewById(R.id.devices_list_view);
-   //     mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
-    //       mDevicesListView.setOnItemClickListener(mDeviceClickListener);
+        mDevicesListView = (ListView)findViewById(R.id.devices_list_view);
+        mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
+        mDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
         // Ask for location permission if not already allowed
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
@@ -120,59 +112,47 @@ public class MainActivity extends AppCompatActivity {
 
         if (mBTArrayAdapter == null) {
             // Device does not support Bluetooth
-            mBluetoothStatus.setText("Status: Bluetooth not found");
+            mBluetoothStatus.setText(R.string.bt_status_not_found);
             Toast.makeText(getApplicationContext(),"Bluetooth device not found!",Toast.LENGTH_SHORT).show();
         }
         else {
 
-            startButton.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    if(mConnectedThread != null) //First check to make sure thread created
-                        mConnectedThread.write("test");
-                }
+            startButton.setOnClickListener(v -> {
+                if(mConnectedThread != null) //First check to make sure thread created
+                    mConnectedThread.write("test");
+                else
+                    Toast.makeText(MainActivity.this,"Select Paired Device To Connect",Toast.LENGTH_SHORT).show();
             });
 
 
-            mScanBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    bluetoothOn();
-                }
-            });
+            mScanBtn.setOnClickListener(v -> bluetoothOn());
 
-            mOffBtn.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v){
-                    bluetoothOff();
-                }
-            });
+            mOffBtn.setOnClickListener(v -> bluetoothOff());
 
-            mListPairedDevicesBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v){
-                    showBTDialog();
+            mListPairedDevicesBtn.setOnClickListener(v -> listPairedDevices());
 
-                    //listPairedDevices();
-                }
-            });
 
-            mDiscoverBtn.setOnClickListener(new View.OnClickListener(){
+            mHidePairedBtn.setOnClickListener(v -> hideDiscover());
+            stopButton.setOnClickListener(v -> {
+                if(mConnectedThread != null) //First check to make sure thread created
+                mConnectedThread.cancel();
+                else
+                    Toast.makeText(MainActivity.this,"Can't Stop A Connection That Wasn't Connected!",Toast.LENGTH_SHORT).show();
 
-                @Override
-                public void onClick(View v){
-                    discover();
 
-                }
             });
         }
+    }
+
+    private void hideDiscover() {
+        mDevicesListView.setVisibility(View.INVISIBLE);
     }
 
     private void bluetoothOn(){
         if (!mBTAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            mBluetoothStatus.setText("Bluetooth enabled");
+            mBluetoothStatus.setText(R.string.bt_enabled);
             Toast.makeText(getApplicationContext(),"Bluetooth turned on",Toast.LENGTH_SHORT).show();
 
         }
@@ -183,78 +163,26 @@ public class MainActivity extends AppCompatActivity {
 
     // Enter here after user selects "yes" or "no" to enabling radio
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent Data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent Data) {
         // Check which request we're responding to
+        super.onActivityResult(requestCode, resultCode, Data);
         if (requestCode == REQUEST_ENABLE_BT) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
                 // The Intent's data Uri identifies which contact was selected.
-                mBluetoothStatus.setText("Enabled");
-            }
-            else
-                mBluetoothStatus.setText("Disabled");
+                mBluetoothStatus.setText(R.string.Enabled);
+            } else
+                mBluetoothStatus.setText(R.string.Disabled);
         }
     }
 
     private void bluetoothOff(){
         mBTAdapter.disable(); // turn off
-        mBluetoothStatus.setText("Bluetooth disabled");
+        mBluetoothStatus.setText(R.string.bt_disabled);
         Toast.makeText(getApplicationContext(),"Bluetooth turned Off", Toast.LENGTH_SHORT).show();
     }
 
-    private void discover(){
-        setContentView(R.layout.btpopup);
-        mDevicesListView = (ListView)findViewById(R.id.devices_list_view);
-        mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
-        mDevicesListView.setOnItemClickListener(mDeviceClickListener);
-
-        final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
-        final LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View Viewlayout = inflater.inflate(R.layout.btpopup, (ViewGroup) findViewById(R.id.bt_popup),false);
-
-        popDialog.setTitle("Available BT Devices");
-        popDialog.setView(Viewlayout);
-
-        // create the arrayAdapter that contains the BTDevices, and set it to a ListView
-        mDevicesListView = (ListView) Viewlayout.findViewById(R.id.devices_list_view);
-        mBTArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        mDevicesListView.setAdapter(mBTArrayAdapter);
-
-        // Check if the device is already discovering
-        if(mBTAdapter.isDiscovering()){
-            mBTAdapter.cancelDiscovery();
-            Toast.makeText(getApplicationContext(),"Discovery stopped",Toast.LENGTH_SHORT).show();
-        }
-        else{
-            if(mBTAdapter.isEnabled()) {
-                mBTArrayAdapter.clear(); // clear items
-                mBTAdapter.startDiscovery();
-                Toast.makeText(getApplicationContext(), "Discovery started", Toast.LENGTH_SHORT).show();
-                registerReceiver(blReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
-            }
-            else{
-                Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
-            }
-        }
-        // Button OK
-        popDialog.setPositiveButton("Go Back",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Intent returnBtn = new Intent(getApplicationContext(),
-                                MainActivity.class);
-
-                        startActivity(returnBtn);
-                      //  setContentView(R.layout.activity_main);
-                    }
-
-                });
-
-        // Create popup and show
-        popDialog.create();
-        popDialog.show();
-    }
 
     final BroadcastReceiver blReceiver = new BroadcastReceiver() {
         @Override
@@ -271,21 +199,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void listPairedDevices(){
 
-        showBTDialog();
-       /* mBTArrayAdapter.clear();
-        mPairedDevices = mBTAdapter.getBondedDevices();
+        mDevicesListView.setVisibility(View.VISIBLE);
+       mBTArrayAdapter.clear();
+        Set<BluetoothDevice> mPairedDevices = mBTAdapter.getBondedDevices();
         if(mBTAdapter.isEnabled()) {
-            // put it's one to the adapter
+            // Sets device to adapter
             for (BluetoothDevice device : mPairedDevices)
                 mBTArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 
             Toast.makeText(getApplicationContext(), "Show Paired Devices", Toast.LENGTH_SHORT).show();
         }
         else
-            Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();*/
+            Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
     }
 
-    private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
+    private final AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -294,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            mBluetoothStatus.setText("Connecting...");
+            mBluetoothStatus.setText(R.string.bt_connecting);
             // Get the device MAC address, which is the last 17 chars in the View
             String info = ((TextView) view).getText().toString();
             final String address = info.substring(info.length() - 17);
@@ -339,6 +267,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }.start();
         }
+
     };
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
@@ -351,55 +280,6 @@ public class MainActivity extends AppCompatActivity {
         return  device.createRfcommSocketToServiceRecord(BT_MODULE_UUID);
     }
 
-
-    private void showBTDialog() {
-        setContentView(R.layout.btpopup);
-       mDevicesListView = (ListView)findViewById(R.id.devices_list_view);
-        mDevicesListView.setAdapter(mBTArrayAdapter); // assign model to view
-        mDevicesListView.setOnItemClickListener(mDeviceClickListener);
-
-        final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
-        final LayoutInflater inflater = (LayoutInflater) this.getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View Viewlayout = inflater.inflate(R.layout.btpopup, (ViewGroup) findViewById(R.id.bt_popup),false);
-
-        popDialog.setTitle("Paired Bluetooth Devices");
-        popDialog.setView(Viewlayout);
-
-        // create the arrayAdapter that contains the BTDevices, and set it to a ListView
-        mDevicesListView = (ListView) Viewlayout.findViewById(R.id.devices_list_view);
-        mBTArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        mDevicesListView.setAdapter(mBTArrayAdapter);
-        mBTArrayAdapter.clear();
-        mPairedDevices = mBTAdapter.getBondedDevices();
-        if(mBTAdapter.isEnabled()) {
-            // put it's one to the adapter
-            for (BluetoothDevice device : mPairedDevices)
-                mBTArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-
-            Toast.makeText(getApplicationContext(), "Show Paired Devices", Toast.LENGTH_SHORT).show();
-        }
-        else
-            Toast.makeText(getApplicationContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
-
-        // Button OK
-        popDialog.setPositiveButton("Go Back",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        Intent returnBtn = new Intent(getApplicationContext(),
-                                MainActivity.class);
-
-                        startActivity(returnBtn);
-                       // setContentView(R.layout.activity_main);
-                    }
-
-                });
-
-        // Create popup and show
-        popDialog.create();
-        popDialog.show();
-
-    }
 
 
 }
