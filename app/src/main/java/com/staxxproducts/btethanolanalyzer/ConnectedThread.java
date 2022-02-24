@@ -25,7 +25,7 @@ public class ConnectedThread extends Thread {
         try {
             tmpIn = socket.getInputStream();
             tmpOut = socket.getOutputStream();
-        } catch (IOException e) { }
+        } catch (IOException ignored) { }
 
         mmInStream = tmpIn;
         mmOutStream = tmpOut;
@@ -35,6 +35,7 @@ public class ConnectedThread extends Thread {
     public void run() {
         byte[] buffer = new byte[1024];  // buffer store for the stream
         int bytes; // bytes returned from read()
+
         // Keep listening to the InputStream until an exception occurs
         while (true) {
             try {
@@ -61,13 +62,13 @@ public class ConnectedThread extends Thread {
         byte[] bytes = input.getBytes();           //converts entered String into bytes
         try {
             mmOutStream.write(bytes);
-        } catch (IOException e) { }
+        } catch (IOException ignored) { }
     }
 
     /* Call this from the main activity to shutdown the connection */
     public void cancel() {
         try {
             mmSocket.close();
-        } catch (IOException e) { }
+        } catch (IOException ignored) { }
     }
 }
