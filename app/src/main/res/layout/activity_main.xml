@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginBottom="8dp"
-        android:text="BT On"
+        android:text="@string/bt_on"
         app:layout_constraintBottom_toTopOf="@+id/btOffBtn"
         app:layout_constraintEnd_toStartOf="@+id/guidelineL"
         app:layout_constraintStart_toStartOf="parent" />
