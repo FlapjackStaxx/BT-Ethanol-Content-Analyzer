@@ -5,7 +5,7 @@
     <string name="Enabled">Enabled</string>
     <string name="Disabled">Disabled</string>
     <string name="bt_disabled">Bluetooth disabled</string>
-    <string name="bt_connecting">Connecting...</string>
+    <string name="bt_connecting">Connecting…</string>
     <string name="stop_sync">Stop Sync</string>
     <string name="start_sync">Start Sync</string>
     <string name="temp">Temp</string>
