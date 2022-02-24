@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     String ethPctNum = "";
     String tempInNum = "";
     String restartName = "";
+    String info = "";
 
     private ListView mDevicesListView;
 
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
             startButton.setOnClickListener(v -> {
                 if(mConnectedThread != null) {//First check to make sure thread created
                     mBluetoothStatus.setText("Sync Started");
+                    startConnection(info);
                 }
                 else
                     Toast.makeText(MainActivity.this,"Select Paired Device To Connect",Toast.LENGTH_SHORT).show();
@@ -147,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
                 if (mConnectedThread != null) {//First check to make sure thread created
                     mConnectedThread.cancel();
                 mBluetoothStatus.setText(R.string.connection_end);
+                ethPct.setText("");
+                fuelTemp.setText("");
             }
                 else
                     Toast.makeText(MainActivity.this,"Can't Stop A Connection That Wasn't Connected!",Toast.LENGTH_SHORT).show();
@@ -228,7 +232,10 @@ public class MainActivity extends AppCompatActivity {
     private final AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            info = ((TextView) view).getText().toString();
 
+            startConnection(info);
+/*
             if(!mBTAdapter.isEnabled()) {
                 Toast.makeText(getBaseContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
                 return;
@@ -279,10 +286,64 @@ public class MainActivity extends AppCompatActivity {
                         hideDiscover();
                     }
                 }
-            }.start();
+            }.start();*/
         }
 
     };
+
+    private void startConnection(String info) {
+
+        if(!mBTAdapter.isEnabled()) {
+            Toast.makeText(getBaseContext(), "Bluetooth not on", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        mBluetoothStatus.setText(R.string.bt_connecting);
+        // Get the device MAC address, which is the last 17 chars in the View
+        final String address = info.substring(info.length() - 17);
+        final String name = info.substring(0,info.length() - 17);
+        restartName = name;
+
+        // Spawn a new thread to avoid blocking the GUI one
+        new Thread()
+        {
+            @Override
+            public void run() {
+                boolean fail = false;
+
+                BluetoothDevice device = mBTAdapter.getRemoteDevice(address);
+
+                try {
+                    mBTSocket = createBluetoothSocket(device);
+                } catch (IOException e) {
+                    fail = true;
+                    Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
+                }
+                // Establish the Bluetooth socket connection.
+                try {
+                    mBTSocket.connect();
+                } catch (IOException e) {
+                    try {
+                        fail = true;
+                        mBTSocket.close();
+                        mHandler.obtainMessage(CONNECTING_STATUS, -1, -1)
+                                .sendToTarget();
+                    } catch (IOException e2) {
+                        //insert code to deal with this
+                        Toast.makeText(getBaseContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                if(!fail) {
+                    mConnectedThread = new ConnectedThread(mBTSocket, mHandler);
+                    mConnectedThread.start();
+
+                    mHandler.obtainMessage(CONNECTING_STATUS, 1, -1, name)
+                            .sendToTarget();
+                    hideDiscover();
+                }
+            }
+        }.start();
+    }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
         try {
