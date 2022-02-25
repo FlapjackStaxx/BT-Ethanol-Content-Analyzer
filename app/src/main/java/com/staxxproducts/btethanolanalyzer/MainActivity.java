@@ -130,12 +130,12 @@ public class MainActivity extends AppCompatActivity {
         // Ask for location permission if not already allowed
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-        ethPct.setText( ethT + "%");
+/*        ethPct.setText( ethT + "%");
         String intemp = "20";
         int calcTemp = (Integer.parseInt(intemp)-5);
         fuelTemp.setText( calcTemp + "°F");
         ethProgressView.setProgress(75,true);
-        tempProgressView.setProgress(calcTemp,true);
+        tempProgressView.setProgress(calcTemp,true);*/
 
 
 
@@ -151,9 +151,14 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+                    int calcTemp = (Integer.parseInt(tempInNum)-5);
+                    int calcPct = (Integer.parseInt(ethPctNum));
 
                     ethPct.setText(ethPctNum + " %");
-                    fuelTemp.setText(tempInNum + " C");
+                    fuelTemp.setText(tempInNum + "°F");
+                    ethProgressView.setProgress(calcPct,true);
+                    tempProgressView.setProgress(calcTemp,true);
+
                 }
 
                 if(msg.what == CONNECTING_STATUS){

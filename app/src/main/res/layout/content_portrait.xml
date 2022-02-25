@@ -127,7 +127,7 @@
             android:layout_weight="0.9"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@string/bluetooth_status" />
+            android:text="Not Connected" />
     </LinearLayout>
 
     <TextView
