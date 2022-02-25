@@ -184,6 +184,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         app:indicatorSize="180dp"
+        app:indicatorColor="@color/greenarray"
         app:layout_constraintBottom_toTopOf="@+id/ethTv"
         app:layout_constraintEnd_toStartOf="@+id/guidelineL"
         app:layout_constraintStart_toStartOf="@+id/guidelineL"
@@ -196,8 +197,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-
+        android:max="190"
         app:indicatorSize="180dp"
+        app:indicatorColor="@color/greenarray"
         app:layout_constraintBottom_toTopOf="@+id/ethTempTv"
         app:layout_constraintEnd_toStartOf="@+id/guidelineR"
         app:layout_constraintStart_toStartOf="@+id/guidelineR"

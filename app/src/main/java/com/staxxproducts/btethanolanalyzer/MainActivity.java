@@ -1,9 +1,11 @@
 package com.staxxproducts.btethanolanalyzer;
 
+import androidx.annotation.ColorInt;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.Manifest;
 
@@ -16,6 +18,7 @@ import android.content.Intent;
 
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     String restartName = "";
     String info = "";
     String ethT = "75";
+
 
 
     private ListView mDevicesListView;
@@ -132,6 +136,9 @@ public class MainActivity extends AppCompatActivity {
         fuelTemp.setText( calcTemp + "°F");
         ethProgressView.setProgress(75,true);
         tempProgressView.setProgress(calcTemp,true);
+
+
+
         mHandler = new Handler(Looper.getMainLooper()){
             @Override
             public void handleMessage(Message msg){
@@ -343,6 +350,13 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Could not create Insecure RFComm Connection",e);
         }
         return  device.createRfcommSocketToServiceRecord(BT_MODULE_UUID);
+    }
+
+    private void createColorArray(){
+
+
+
+
     }
 
 }
