@@ -15,6 +15,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,9 +28,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -57,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     String tempInNum = "";
     String restartName = "";
     String info = "";
+    String ethT = "75";
+
 
     private ListView mDevicesListView;
 
@@ -72,20 +81,40 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-       // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_portrait);
+
+
+/*        if(getResources().getDisplayMetrics().widthPixels>getResources().getDisplayMetrics().
+                heightPixels)
+        {
+            setContentView(R.layout.content_landscape);
+
+            //Toast.makeText(this,"Screen switched to Landscape mode",Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            setContentView(R.layout.content_portrait);
+
+           // Toast.makeText(this,"Screen switched to Portrait mode",Toast.LENGTH_SHORT).show();
+        }*/
+
 
         mBluetoothStatus = findViewById(R.id.bluetooth_status);
         ethPct = findViewById(R.id.ethNumTv);
         fuelTemp = findViewById(R.id.fTempNumTV);
-        Button mScanBtn = findViewById(R.id.btOnBtn);
-        Button mOffBtn = findViewById(R.id.btOffBtn);
-        Button mHidePairedBtn = findViewById(R.id.hidePairedBtn);
-        Button mListPairedDevicesBtn = findViewById(R.id.btShowPairedBtn);
-        Button startButton = findViewById(R.id.startBtn);
-        Button stopButton = findViewById(R.id.stopBtn);
+        ImageButton mScanBtn = findViewById(R.id.btOnBtn);
+        ImageButton mOffBtn = findViewById(R.id.btOffBtn);
+        ImageButton mHidePairedBtn = findViewById(R.id.hidePairedBtn);
+        ImageButton mListPairedDevicesBtn = findViewById(R.id.btShowPairedBtn);
+        ImageButton startButton = findViewById(R.id.startBtn);
+        ImageButton stopButton = findViewById(R.id.stopBtn);
+        float etohNum = Float.parseFloat(ethT);
+        CircularProgressIndicator ethProgressView = findViewById(R.id.ethContentCirc);
+        CircularProgressIndicator tempProgressView = findViewById(R.id.ethTempCirc);
+
+
+
 
         mBTArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         mBTAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -97,8 +126,12 @@ public class MainActivity extends AppCompatActivity {
         // Ask for location permission if not already allowed
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-
-
+        ethPct.setText( ethT + "%");
+        String intemp = "20";
+        int calcTemp = (Integer.parseInt(intemp)-5);
+        fuelTemp.setText( calcTemp + "°F");
+        ethProgressView.setProgress(75,true);
+        tempProgressView.setProgress(calcTemp,true);
         mHandler = new Handler(Looper.getMainLooper()){
             @Override
             public void handleMessage(Message msg){
@@ -107,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
                     readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
                     ethPctNum = readMessage.substring(0,2);
                     tempInNum = readMessage.substring(3,5);
+
+
+
+
 
                     ethPct.setText(ethPctNum + " %");
                     fuelTemp.setText(tempInNum + " C");
@@ -157,7 +194,24 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,"Can't Stop A Connection That Wasn't Connected!",Toast.LENGTH_SHORT).show();
             });
         }
+
+
     }
+
+
+    @Override
+    public void onConfigurationChanged(@NotNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks the orientation of the screen
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.content_landscape);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
+            setContentView(R.layout.content_portrait);
+        }
+    }
+
+
     // Hides the paired devices list
     private void hideDeviceList() {
         mDevicesListView.setVisibility(View.INVISIBLE);
