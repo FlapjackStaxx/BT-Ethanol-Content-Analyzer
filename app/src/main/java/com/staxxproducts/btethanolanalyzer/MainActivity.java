@@ -1,41 +1,28 @@
 package com.staxxproducts.btethanolanalyzer;
 
-import androidx.annotation.ColorInt;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-
 import android.Manifest;
-
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-
-
 import android.content.Intent;
-
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
-
 import android.view.View;
-
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 
@@ -137,7 +124,11 @@ public class MainActivity extends AppCompatActivity {
         ethProgressView.setProgress(75,true);
         tempProgressView.setProgress(calcTemp,true);*/
 
-
+/*        ethPct.setText(ethT + " %");
+        fuelTemp.setText("25° F");
+        ethProgressView.setProgress(10,true);
+        tempProgressView.setProgress(30,true);
+        mBluetoothStatus.setText("Connected");*/
 
         mHandler = new Handler(Looper.getMainLooper()){
             @Override
@@ -151,13 +142,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                    int calcTemp = (Integer.parseInt(tempInNum)-5);
-                    int calcPct = (Integer.parseInt(ethPctNum));
+                    /*int calcTemp = (Integer.parseInt(tempInNum)-5);
+                    int calcPct = (Integer.parseInt(ethPctNum));*/
 
                     ethPct.setText(ethPctNum + " %");
                     fuelTemp.setText(tempInNum + "°F");
-                    ethProgressView.setProgress(calcPct,true);
-                    tempProgressView.setProgress(calcTemp,true);
+                  /*  ethProgressView.setProgress(calcPct,true);
+                    tempProgressView.setProgress(calcTemp,true);*/
 
                 }
 
@@ -211,17 +202,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onConfigurationChanged(@NotNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
 
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setContentView(R.layout.content_landscape);
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-            setContentView(R.layout.content_portrait);
-        }
-    }
 
 
     // Hides the paired devices list
@@ -357,11 +338,5 @@ public class MainActivity extends AppCompatActivity {
         return  device.createRfcommSocketToServiceRecord(BT_MODULE_UUID);
     }
 
-    private void createColorArray(){
-
-
-
-
-    }
 
 }
