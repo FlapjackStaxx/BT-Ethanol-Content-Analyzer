@@ -14,7 +14,7 @@
     <string name="ethanol_content">Ethanol Content</string>
     <string name="bluetooth_status"><![CDATA[<Bluetooth Status>]]></string>
     <string name="status">Status:</string>
-    <string name="app_main_title">Tuner Things Ethanol Content Analyzer</string>
+    <string name="app_main_title">Ethanol Content Analyzer</string>
     <string name="show_paired">Show Paired Devices</string>
     <string name="bt_off">BT Off</string>
     <string name="hide_paired">Hide Paired Devices</string>

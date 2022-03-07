@@ -1,4 +1,4 @@
-package com.staxxproducts.btethanolanalyzer;
+package com.staxxproducts.ethanolanaolyzer;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,8 +24,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -54,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     String tempInNum = "";
     String restartName = "";
     String info = "";
-    String ethT = "75";
+  //  String ethT = "75";
 
 
 
@@ -73,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_portrait);
+        setContentView(R.layout.content_portrait_new);
 
 
 /*        if(getResources().getDisplayMetrics().widthPixels>getResources().getDisplayMetrics().
@@ -93,16 +90,16 @@ public class MainActivity extends AppCompatActivity {
 
         mBluetoothStatus = findViewById(R.id.bluetooth_status);
         ethPct = findViewById(R.id.ethNumTv);
-        fuelTemp = findViewById(R.id.fTempNumTV);
+     //   fuelTemp = findViewById(R.id.fTempNumTV);
         ImageButton mScanBtn = findViewById(R.id.btOnBtn);
         ImageButton mOffBtn = findViewById(R.id.btOffBtn);
         ImageButton mHidePairedBtn = findViewById(R.id.hidePairedBtn);
         ImageButton mListPairedDevicesBtn = findViewById(R.id.btShowPairedBtn);
         ImageButton startButton = findViewById(R.id.startBtn);
         ImageButton stopButton = findViewById(R.id.stopBtn);
-        float etohNum = Float.parseFloat(ethT);
+    //    float etohNum = Float.parseFloat(ethT);
         CircularProgressIndicator ethProgressView = findViewById(R.id.ethContentCirc);
-        CircularProgressIndicator tempProgressView = findViewById(R.id.ethTempCirc);
+    //    CircularProgressIndicator tempProgressView = findViewById(R.id.ethTempCirc);
 
 
 
@@ -137,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     String readMessage;
                     readMessage = new String((byte[]) msg.obj, StandardCharsets.UTF_8);
                     ethPctNum = readMessage.substring(0,2);
-                    tempInNum = readMessage.substring(3,5);
+         //           tempInNum = readMessage.substring(3,5);
 
 
 
@@ -146,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                     int calcPct = (Integer.parseInt(ethPctNum));*/
 
                     ethPct.setText(ethPctNum + " %");
-                    fuelTemp.setText(tempInNum + "°F");
+              //      fuelTemp.setText(tempInNum + "°F");
                   /*  ethProgressView.setProgress(calcPct,true);
                     tempProgressView.setProgress(calcTemp,true);*/
 

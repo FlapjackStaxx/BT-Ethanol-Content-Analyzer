@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    >
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+
+    <ImageButton
+        android:id="@+id/btOnBtn"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/bt_on_btn"
+        android:text="@string/bt_on"
+        app:layout_constraintBottom_toTopOf="@+id/btOffBtn"
+        app:layout_constraintEnd_toStartOf="@+id/startBtn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btOffBtn"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/bt_off_btn"
+        android:text="@string/bt_off"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/stopBtn"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/hidePairedBtn"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/hide_paired_btn"
+        android:text="@string/hide_paired"
+        app:layout_constraintBottom_toTopOf="@+id/btShowPairedBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/startBtn" />
+
+
+    <ImageButton
+        android:id="@+id/btShowPairedBtn"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/show_paired_btn"
+
+        android:text="@string/show_paired"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/stopBtn" />
+
+    <TextView
+        android:id="@+id/nameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/app_main_title"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ListView
+        android:id="@+id/devices_list_view"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginBottom="18dp"
+        android:choiceMode="singleChoice"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/startBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineR"
+        app:layout_constraintStart_toStartOf="@+id/guidelineL"
+        app:layout_constraintTop_toBottomOf="@+id/nameTv">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/status"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/bluetooth_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Not Connected" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/ethTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="9dp"
+        android:layout_marginBottom="70dp"
+        android:text="@string/ethanol_content"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/devices_list_view"
+        app:layout_constraintEnd_toEndOf="@+id/ethContentCirc" />
+
+    <TextView
+        android:id="@+id/ethNumTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/eth"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ethContentCirc"
+        app:layout_constraintEnd_toEndOf="@+id/ethContentCirc"
+        app:layout_constraintStart_toStartOf="@+id/ethContentCirc"
+        app:layout_constraintTop_toTopOf="@+id/ethContentCirc" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/ethContentCirc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:indicatorColor="@color/greenarray"
+        app:indicatorSize="180dp"
+        app:layout_constraintBottom_toTopOf="@+id/ethTv"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineR"
+        app:layout_constraintStart_toStartOf="@+id/guidelineL"
+        app:trackColor="@color/black"
+        app:trackCornerRadius="8dp"
+        app:trackThickness="25dp" />
+
+
+    <ImageButton
+        android:id="@+id/startBtn"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/start_sync_btn"
+
+        android:text="@string/start_sync"
+        app:layout_constraintBottom_toTopOf="@+id/stopBtn"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineR"
+        app:layout_constraintStart_toStartOf="@+id/guidelineL" />
+
+    <ImageButton
+        android:id="@+id/stopBtn"
+        android:layout_width="110dp"
+        android:layout_height="40dp"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/stop_sync_btn"
+        android:text="@string/stop_sync"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/btOffBtn"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineR"
+        app:layout_constraintStart_toStartOf="@+id/guidelineL" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

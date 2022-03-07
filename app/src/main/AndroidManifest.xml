@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.staxxproducts.btethanolanalyzer">
+    package="com.staxxproducts.ethanolanaolyzer">
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BTEthanolAnalyzer">
         <activity
-            android:name=".MainActivity"
+            android:name="com.staxxproducts.ethanolanaolyzer.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
 

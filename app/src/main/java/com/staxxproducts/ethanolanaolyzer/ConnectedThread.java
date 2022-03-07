@@ -1,4 +1,4 @@
-package com.staxxproducts.btethanolanalyzer;
+package com.staxxproducts.ethanolanaolyzer;
 
 import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
